@@ -8,6 +8,8 @@
         body {
             padding: 20px;
             font-family: -apple-system, system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
         }
         #response {
             margin-top: 20px;
@@ -15,6 +17,7 @@
             background: #f0f0f0;
             border-radius: 4px;
             white-space: pre-wrap;
+            overflow-x: auto;
         }
         button {
             padding: 10px 20px;
@@ -27,12 +30,23 @@
         .error {
             color: red;
             margin-top: 10px;
+            padding: 10px;
+            background: #fff0f0;
+            border-radius: 4px;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <h2>API Test</h2>
     <button onclick="testAPI()">Testa API</button>
+    <div id="status" class="status"></div>
     <div id="response"></div>
     <div id="error" class="error"></div>
 
@@ -40,9 +54,11 @@
         async function testAPI() {
             const responseDiv = document.getElementById('response');
             const errorDiv = document.getElementById('error');
+            const statusDiv = document.getElementById('status');
             
             responseDiv.textContent = 'Laddar...';
             errorDiv.textContent = '';
+            statusDiv.textContent = 'Anropar API...';
 
             try {
                 const response = await fetch('/api/generate', {
@@ -50,14 +66,21 @@
                 });
 
                 const data = await response.json();
-                responseDiv.textContent = JSON.stringify(data, null, 2);
                 
                 // Visa HTTP status
-                responseDiv.textContent = `Status: ${response.status}\n\nSvar:\n` + 
+                statusDiv.textContent = `HTTP Status: ${response.status}`;
+                
+                // Visa fullständigt svar
+                responseDiv.textContent = 'Svar från API:\n' + 
                     JSON.stringify(data, null, 2);
 
+                // Visa eventuella fel från API:et
+                if (data.error) {
+                    errorDiv.textContent = `API Fel: ${data.error}\nDetaljer: ${data.details || 'Inga detaljer tillgängliga'}`;
+                }
+
             } catch (error) {
-                errorDiv.textContent = 'Fel: ' + error.message;
+                errorDiv.textContent = 'Nätverksfel: ' + error.message;
                 responseDiv.textContent = '';
             }
         }
