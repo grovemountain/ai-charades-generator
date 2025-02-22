@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charad Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+        }
+        .result {
+            text-align: center;
+            font-size: 24px;
+            min-height: 60px;
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:disabled {
+            background: #ccc;
+        }
+        button:hover:not(:disabled) {
+            background: #0051cc;
+        }
+        .error {
+            color: #dc2626;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Charad Generator</h1>
+        <div class="result" id="result">
+            Tryck på knappen för att generera ett ordpar
+        </div>
+        <button id="generateBtn" onclick="generatePair()">
+            Generera nytt ordpar
+        </button>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        async function generatePair() {
+            const button = document.getElementById('generateBtn');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+
+            button.disabled = true;
+            button.textContent = 'Genererar...';
+            errorDiv.textContent = '';
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Något gick fel');
+                }
+
+                const data = await response.json();
+                resultDiv.textContent = data.ordpar;
+            } catch (err) {
+                errorDiv.textContent = 'Kunde inte generera nytt ordpar. Försök igen senare.';
+                resultDiv.textContent = 'Tryck på knappen för att generera ett ordpar';
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Generera nytt ordpar';
+            }
+        }
+    </script>
+</body>
+</html>
