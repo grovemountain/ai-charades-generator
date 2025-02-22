@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: -apple-system, system-ui, sans-serif;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        button {
+            padding: 10px 20px;
+            background: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>API Test</h2>
+    <button onclick="testAPI()">Testa API</button>
+    <div id="response"></div>
+    <div id="error" class="error"></div>
+
+    <script>
+        async function testAPI() {
+            const responseDiv = document.getElementById('response');
+            const errorDiv = document.getElementById('error');
+            
+            responseDiv.textContent = 'Laddar...';
+            errorDiv.textContent = '';
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                // Visa HTTP status
+                responseDiv.textContent = `Status: ${response.status}\n\nSvar:\n` + 
+                    JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                errorDiv.textContent = 'Fel: ' + error.message;
+                responseDiv.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>
