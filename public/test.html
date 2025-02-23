@@ -61,8 +61,8 @@
             statusDiv.textContent = 'Anropar API...';
 
             try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST'
+                const response = await fetch('/api/charade', {
+                    method: 'GET'
                 });
 
                 const data = await response.json();
