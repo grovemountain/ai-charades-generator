@@ -11,7 +11,7 @@ app.get('/api/home', (req, res) => {
 });
 
 // New charades endpoint
-app.post('/api/charades', async (req, res) => {
+app.get('/api/charades', async (req, res) => {
     try {
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
