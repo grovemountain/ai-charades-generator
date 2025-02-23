@@ -64,7 +64,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Charad Generator</h1>
+        <h1>Charadgenerator</h1>
         <div class="result" id="result">
             Tryck på knappen för att generera ett ordpar
         </div>
@@ -86,7 +86,7 @@
 
             try {
                 const response = await fetch('/api/charade', {
-                    method: 'POST'
+                    method: 'GET'
                 });
 
                 if (!response.ok) {

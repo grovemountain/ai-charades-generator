@@ -42,6 +42,7 @@ app.get('/api/charade', async (req, res) => {
 
         let data;
         try {
+            console.log('Genererad charad:', responseText);
             data = JSON.parse(responseText);
         } catch (e) {
             throw new Error('Invalid JSON response from API');
