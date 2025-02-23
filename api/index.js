@@ -52,7 +52,7 @@ app.get('/api/charade', async (req, res) => {
         }
 
         console.log('Genererad charad:', data.content[0].text.trim());
-        res.json({ ordpar: data.content[0].text.trim() });
+        res.json({ ordpar: data.content[0].text.trim().toLowerCase() });
     } catch (error) {
         console.error('Detailed error:', error);
         res.status(500).json({
