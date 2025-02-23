@@ -42,7 +42,6 @@ app.get('/api/charade', async (req, res) => {
 
         let data;
         try {
-            console.log('Genererad charad:', responseText);
             data = JSON.parse(responseText);
         } catch (e) {
             throw new Error('Invalid JSON response from API');
@@ -52,6 +51,7 @@ app.get('/api/charade', async (req, res) => {
             throw new Error('Unexpected API response format');
         }
 
+        console.log('Genererad charad:', data.content[0].text.trim());
         res.json({ ordpar: data.content[0].text.trim() });
     } catch (error) {
         console.error('Detailed error:', error);
