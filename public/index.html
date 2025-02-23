@@ -81,11 +81,11 @@
             const errorDiv = document.getElementById('error');
 
             button.disabled = true;
-            button.textContent = 'Genererar...';
+            button.textContent = 'AI Genererar...';
             errorDiv.textContent = '';
 
             try {
-                const response = await fetch('/api/generate', {
+                const response = await fetch('/api/charade', {
                     method: 'POST'
                 });
 
@@ -96,11 +96,11 @@
                 const data = await response.json();
                 resultDiv.textContent = data.ordpar;
             } catch (err) {
-                errorDiv.textContent = 'Kunde inte generera nytt ordpar. Försök igen senare.';
-                resultDiv.textContent = 'Tryck på knappen för att generera ett ordpar';
+                errorDiv.textContent = 'Kunde inte generera charad. Försök igen senare.';
+                resultDiv.textContent = 'Tryck på knappen för att generera nästa charadämne';
             } finally {
                 button.disabled = false;
-                button.textContent = 'Generera nytt ordpar';
+                button.textContent = 'Generera';
             }
         }
     </script>
