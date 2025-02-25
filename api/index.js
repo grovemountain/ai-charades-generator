@@ -10,9 +10,21 @@ app.get('/api/home', (req, res) => {
     res.status(200).json('Welcome, your app is working well!!!');
 });
 
-// New charades endpoint
-app.get('/api/charade', async (req, res) => {
+// Updated charades endpoint
+app.post('/api/charade', async (req, res) => {
     try {
+        // Get previous words from request body
+        const previousWords = req.body.previousWords || [];
+        
+        // Create prompt with previous words to avoid duplicates
+        let promptText = "Generera ett svenskt ordpar för en charad. Det ska vara ett verb i presens particip form (t.ex. 'springande') följt av ett substantiv (t.ex. 'katt').";
+        
+        if (previousWords.length > 0) {
+            promptText += ` Undvik följande ordpar som redan har använts: ${previousWords.join(", ")}.`;
+        }
+        
+        promptText += " Svara endast med ordparet, inget annat.";
+
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
@@ -26,7 +38,7 @@ app.get('/api/charade', async (req, res) => {
                 system: "Du är en app som genererar svenska ordpar för charader. Svara endast med ordparet.",
                 messages: [{
                     role: "user",
-                    content: "Generera ett svenskt ordpar för en charad. Det ska vara ett verb i presens particip form (t.ex. 'springande') följt av ett substantiv (t.ex. 'katt'). Svara endast med ordparet, inget annat."
+                    content: promptText
                 }]
             })
         });
@@ -51,8 +63,9 @@ app.get('/api/charade', async (req, res) => {
             throw new Error('Unexpected API response format');
         }
 
-        console.log('Genererad charad:', data.content[0].text.trim());
-        res.json({ ordpar: data.content[0].text.trim().toLowerCase() });
+        const newOrdpar = data.content[0].text.trim().toLowerCase();
+        console.log('Genererad charad:', newOrdpar);
+        res.json({ ordpar: newOrdpar });
     } catch (error) {
         console.error('Detailed error:', error);
         res.status(500).json({
