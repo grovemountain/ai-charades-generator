@@ -17,7 +17,7 @@ app.post('/api/charade', async (req, res) => {
         const previousWords = req.body.previousWords || [];
         
         // Create prompt with previous words to avoid duplicates
-        let promptText = "Generera ett svenskt ordpar för en charad. Det ska vara ett verb i presens particip form (t.ex. 'springande') följt av ett substantiv (t.ex. 'katt').";
+        let promptText = "Generera ett svenskt ordpar för en charad. Det ska vara ett verb i presens particip form (t.ex. 'springande') följt av ett substantiv (t.ex. 'katt'). Det måste vara en existerande fysisk sak, djur eller företelse som går att representera i en charad.";
         
         if (previousWords.length > 0) {
             promptText += ` Undvik följande ordpar som redan har använts: ${previousWords.join(", ")}.`;
